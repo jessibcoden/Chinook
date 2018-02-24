@@ -17,8 +17,7 @@ select c.FirstName + ' ' + LastName Brazilians
 
 select c.FirstName + ' ' + LastName Brazilians, i.InvoiceId, i.InvoiceDate, i.BillingCountry
 	from Customer c
-	inner join Invoice i
-	on i.CustomerId = c.CustomerId
+	inner join Invoice i on i.CustomerId = c.CustomerId
 	where c.Country = 'Brazil'
 
 --4. Provide a query showing only the Employees who are Sales Agents.:
@@ -58,11 +57,11 @@ select Inv09.Total "2009 Invoice Count", Inv11.Total "2011 Invoice Count"
 	from 
 	(select count (i.InvoiceDate) Total
 		from Invoice i 
-		where i.InvoiceDate like '%2009%') Inv09
+		where year (i.InvoiceDate) = 2009) Inv09
 	join 
 	(select count (i.InvoiceDate) Total
 	from Invoice i 
-	where i.InvoiceDate like '%2011%') Inv11
+	where year (i.InvoiceDate) = 2011) Inv11
 	on Inv09.Total = Inv11.Total
 
 --10. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for Invoice ID 37.
@@ -135,7 +134,7 @@ select top(1) e.FirstName + ' ' + e.LastName Agent, sum (i.Total) TotalSales
 	from Invoice i
 	inner join Customer c on i.CustomerId = c.CustomerId
 	inner join Employee e on c.SupportRepId = e.EmployeeId
-	where i.InvoiceDate like '%2009%'
+	where year (i.InvoiceDate) = 2009
 	group by e.FirstName + ' ' + e.LastName
 	order by TotalSales desc
 	
@@ -175,7 +174,7 @@ select TOP(1) t.Name, sum (il.TrackId * il.Quantity) "Total Sold"
 	from InvoiceLine il
 	inner join Track t on il.TrackId = t.TrackId
 	inner join Invoice i on il.InvoiceId = i.InvoiceId
-	where i.InvoiceDate like '%2013%'
+	where year (i.InvoiceDate) = 2013 
 	group by t.Name
 	order by "Total Sold" desc
 
